@@ -32,6 +32,16 @@ if selected2 == 'Upload':
     if uploaded_file is not None:
         if uploaded_file.name.lower().endswith('.csv'):
             df = pd.read_csv(uploaded_file)
+        elif uploaded_file.name.lower().endswith('.xlsx'):
+            df = pd.read_excel(uploaded_file)
+        elif uploaded_file.name.lower().endswith('.txt'):
+            df = pd.read_fwf(uploaded_file)
+        elif uploaded_file.name.lower().endswith('.pkl'):
+            df = pd.read_pickle(uploaded_file)
+        elif uploaded_file.name.lower().endswith('.dta'):
+            df = pd.read_stata(uploaded_file)
+        elif uploaded_file.name.lower().endswith('.sav'):
+            df = pd.read_spss(uploaded_file.read())
         st.session_state['df']=df
 
 if selected2 == 'Profiling':
@@ -39,6 +49,8 @@ if selected2 == 'Profiling':
     if df is not None:
         pr = df.profile_report()
         st_profile_report(pr)
+    else:
+        st.write("No data was found! Load Data to generate a profile report")
 
 if selected2 == 'Automatic Data Cleaning':
     df = st.session_state['df']
@@ -57,5 +69,7 @@ if selected2 == 'Automatic Data Cleaning':
             "text/csv",
             key='download-csv'
             )
+    else:
+        st.write("No data was found! Load Data to perform automated data cleaning")
         
 
